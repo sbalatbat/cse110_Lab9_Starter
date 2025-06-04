@@ -34,6 +34,7 @@ form.addEventListener('submit', e => {
             console.log("Invalid operation: missing operands.");
             alert("There are missing operands. Please enter valid numbers in decimal.");
         }
+        console.error(error);
     }
     finally {
         console.log(`Evaluated "${firstNum} ${operator} ${secondNum}"`);
@@ -117,7 +118,7 @@ container.addEventListener('click', event => {
                 throw new Error("Global error demo");
             }
             catch (error) {
-                console.log(`${error.name}: ${error.message}`);
+                console.error(error);
             }
             break;
     }
