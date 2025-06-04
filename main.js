@@ -6,11 +6,23 @@ form.addEventListener('submit', e => {
     let secondNum = document.querySelector('#second-num').value;
     let operator = document.querySelector('#operator').value;
     try {
+        if (firstNum === "" || secondNum === "") {
+            throw new TypeError("Incomplete data: No input numbers");
+        }
         output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     }
     catch (error) {
-        console.error(error);
-        alert(`${error.name}: ${error.message}`);
+        if (error.name == 'ReferenceError') {
+            if (typeof(firstNum) == 'string' || typeof(secondNum) == 'string') {
+                alert("Please enter a valid number in decimal.");
+            }
+        }
+        if (error.name == 'TypeError') {
+            alert("There are no operands. Please enter valid numbers in decimal.");
+        }
+    }
+    finally {
+        console.log(`Evaluated "${firstNum} ${operator} ${secondNum}"`);
     }
 });
 
