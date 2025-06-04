@@ -1,3 +1,10 @@
+class ValidationError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "ValidationError";
+    }
+}
+
 let form = document.querySelector('form');
 form.addEventListener('submit', e => {
     e.preventDefault();
@@ -7,18 +14,25 @@ form.addEventListener('submit', e => {
     let operator = document.querySelector('#operator').value;
     try {
         if (firstNum === "" || secondNum === "") {
-            throw new TypeError("Incomplete data: No input numbers");
+            throw new ValidationError("Incomplete data: No input numbers");
         }
         output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     }
     catch (error) {
         if (error.name == 'ReferenceError') {
-            if (typeof(firstNum) == 'string' || typeof(secondNum) == 'string') {
+            if (isNaN(firstNum) || isNaN(secondNum)) {
                 alert("Please enter a valid number in decimal.");
             }
+            if (isNaN(firstNum)) {
+                console.log(`Invalid: ${firstNum}`);
+            }
+            if (isNaN(secondNum)) {
+                console.log(`Invalid: ${secondNum}`);
+            }
         }
-        if (error.name == 'TypeError') {
-            alert("There are no operands. Please enter valid numbers in decimal.");
+        if (error.name == 'ValidationError') {
+            console.log("Invalid operation: missing operands.");
+            alert("There are missing operands. Please enter valid numbers in decimal.");
         }
     }
     finally {
@@ -27,8 +41,6 @@ form.addEventListener('submit', e => {
 });
 
 let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
-
-// Start your code here
 
 const container = document.querySelector("#error-btns");
 const label = "Grouped logs";
@@ -100,6 +112,13 @@ container.addEventListener('click', event => {
         case 'Console Trace':
             first();
             break;
-        // case 'Trigger a Global Error':
+        case 'Trigger a Global Error':
+            try {
+                throw new Error("Global error demo");
+            }
+            catch (error) {
+                console.log(`${error.name}: ${error.message}`);
+            }
+            break;
     }
 })
